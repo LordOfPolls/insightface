@@ -19,8 +19,7 @@ def estimate_norm(lmk, image_size=112,mode='arcface'):
         diff_x = 8.0*ratio
     dst = arcface_dst * ratio
     dst[:,0] += diff_x
-    tform = trans.SimilarityTransform()
-    tform.estimate(lmk, dst)
+    tform = trans.SimilarityTransform.from_estimate(lmk, dst)
     M = tform.params[0:2, :]
     return M
 
