@@ -2,7 +2,10 @@
 import os
 import os.path as osp
 import zipfile
+import logging
 from .download import download_file
+
+logger = logging.getLogger(__name__)
 
 BASE_REPO_URL = 'https://github.com/deepinsight/insightface/releases/download/v0.7'
 
@@ -11,7 +14,7 @@ def download(sub_dir, name, force=False, root='~/.insightface'):
     dir_path = os.path.join(_root, sub_dir, name)
     if osp.exists(dir_path) and not force:
         return dir_path
-    print('download_path:', dir_path)
+    logger.info('download_path: %s', dir_path)
     zip_file_path = os.path.join(_root, sub_dir, name + '.zip')
     model_url = "%s/%s.zip"%(BASE_REPO_URL, name)
     download_file(model_url,
@@ -35,7 +38,7 @@ def download_onnx(sub_dir, model_file, force=False, root='~/.insightface', downl
         return new_model_file
     if not osp.exists(model_root):
         os.makedirs(model_root)
-    print('download_path:', new_model_file)
+    logger.info('download_path: %s', new_model_file)
     if not download_zip:
         model_url = "%s/%s"%(BASE_REPO_URL, model_file)
         download_file(model_url,

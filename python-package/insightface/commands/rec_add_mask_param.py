@@ -1,6 +1,7 @@
 
 import numbers
 import os
+import logging
 from argparse import ArgumentParser, Namespace
 
 import mxnet as mx
@@ -9,6 +10,8 @@ import numpy as np
 from ..app import MaskRenderer
 from ..data.rec_builder import RecBuilder
 from . import BaseInsightFaceCLICommand
+
+logger = logging.getLogger(__name__)
 
 
 def rec_add_mask_param_command_factory(args: Namespace):
@@ -54,12 +57,12 @@ class RecAddMaskParamCommand(BaseInsightFaceCLICommand):
         else:
             imgidx = np.array(list(self.imgrec.keys))
         stat = [0, 0]
-        print('total:', len(imgidx))
+        logger.info('total: %s', len(imgidx))
         for iid, idx in enumerate(imgidx):
             #if iid==500000:
             #    break
             if iid%1000==0:
-                print('processing:', iid)
+                logger.info('processing: %s', iid)
             s = imgrec.read_idx(idx)
             header, img = mx.recordio.unpack(s)
             label = header.label
@@ -84,11 +87,11 @@ class RecAddMaskParamCommand(BaseInsightFaceCLICommand):
                 mask_label = tool.encode_params(params)
                 wlabel = [label, 0.0]+mask_label # 237 including idlabel, total mask params size is 235
                 if iid==0:
-                    print('param size:', len(mask_label), len(wlabel), label)
+                    logger.debug('param size: %s %s %s', len(mask_label), len(wlabel), label)
             assert len(wlabel)==237
             wrec.add_image(img, wlabel)
             #print(len(params))
 
         wrec.close()
-        print('finished on', self._output, ', failed:', stat[0])
+        logger.info('finished on %s, failed: %s', self._output, stat[0])
 

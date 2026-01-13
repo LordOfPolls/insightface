@@ -4,9 +4,12 @@ from __future__ import print_function
 
 import numpy as np
 import scipy.io as sio
+import logging
 from .. import mesh
 from . import fit
 from . import load
+
+logger = logging.getLogger(__name__)
 
 class  MorphabelModel(object):
     """docstring for  MorphabelModel
@@ -29,7 +32,7 @@ class  MorphabelModel(object):
         if model_type=='BFM':
             self.model = load.load_BFM(model_path)
         else:
-            print('sorry, not support other 3DMM model now')
+            logger.error('sorry, not support other 3DMM model now')
             exit()
             
         # fixed attributes

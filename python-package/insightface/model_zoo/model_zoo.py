@@ -2,11 +2,12 @@
 # @Organization  : insightface.ai
 # @Author        : Jia Guo
 # @Time          : 2021-05-04
-# @Function      : 
+# @Function      :
 
 import os
 import os.path as osp
 import glob
+import logging
 import onnxruntime
 from .arcface_onnx import *
 from .retinaface import *
@@ -15,6 +16,8 @@ from .landmark import *
 from .attribute import Attribute
 from .inswapper import INSwapper
 from ..utils import download_onnx
+
+logger = logging.getLogger(__name__)
 
 __all__ = ['get_model']
 
@@ -38,7 +41,7 @@ class ModelRouter:
 
     def get_model(self, **kwargs):
         session = PickableInferenceSession(self.onnx_file, **kwargs)
-        print(f'Applied providers: {session._providers}, with options: {session._provider_options}')
+        logger.info('Applied providers: %s, with options: %s', session._providers, session._provider_options)
         inputs = session.get_inputs()
         input_cfg = inputs[0]
         input_shape = input_cfg.shape

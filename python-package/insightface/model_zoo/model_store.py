@@ -7,8 +7,11 @@ __all__ = ['get_model_file']
 import os
 import zipfile
 import glob
+import logging
 
 from ..utils import download, check_sha1
+
+logger = logging.getLogger(__name__)
 
 _model_sha1 = {
     name: checksum
@@ -72,11 +75,11 @@ def get_model_file(name, root=os.path.join('~', '.insightface', 'models')):
         if check_sha1(file_path, sha1_hash):
             return file_path
         else:
-            print(
+            logger.warning(
                 'Mismatch in the content of model file detected. Downloading again.'
             )
     else:
-        print('Model file is not found. Downloading.')
+        logger.info('Model file is not found. Downloading.')
 
     if not os.path.exists(root):
         os.makedirs(root)
