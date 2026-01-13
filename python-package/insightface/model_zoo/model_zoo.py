@@ -41,7 +41,7 @@ class ModelRouter:
 
     def get_model(self, **kwargs):
         session = PickableInferenceSession(self.onnx_file, **kwargs)
-        logger.info('Applied providers: %s, with options: %s', session._providers, session._provider_options)
+        logger.debug('Applied providers: %s, with options: %s', session._providers, session._provider_options)
         inputs = session.get_inputs()
         input_cfg = inputs[0]
         input_shape = input_cfg.shape

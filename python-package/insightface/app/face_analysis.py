@@ -35,10 +35,10 @@ class FaceAnalysis:
             if model is None:
                 logger.warning('model not recognized: %s', onnx_file)
             elif allowed_modules is not None and model.taskname not in allowed_modules:
-                logger.info('model ignore: %s %s', onnx_file, model.taskname)
+                logger.debug('model ignore: %s %s', onnx_file, model.taskname)
                 del model
             elif model.taskname not in self.models and (allowed_modules is None or model.taskname in allowed_modules):
-                logger.info('find model: %s %s %s %s %s', onnx_file, model.taskname, model.input_shape, model.input_mean, model.input_std)
+                logger.debug('find model: %s %s %s %s %s', onnx_file, model.taskname, model.input_shape, model.input_mean, model.input_std)
                 self.models[model.taskname] = model
             else:
                 logger.warning('duplicated model task type, ignore: %s %s', onnx_file, model.taskname)
